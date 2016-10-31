@@ -10,6 +10,9 @@
     // Tages ausliest. Das würde ne Menge Änderungen an der Businesslogik erzwingen
     // Am besten lässt man dieses Skript Nachts (nach Sunset und Sunset-Bier) laufen. Wir lassen es um 23:45 laufen
     //
+    // To do's:
+    // - Konfigurationsdaten aus dem Skript entfernen und in eine eigene Konfig-Datei auslagern
+    // - Datum für das reported werden soll konfigurierbar machen
     // Version 0.1 - 28.10.16 erste Version
     //
     // (c) Torsten Beyer, 2016
