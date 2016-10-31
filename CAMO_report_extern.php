@@ -3,11 +3,11 @@
     // CAMO Reporting für vereinsflieger.de
     //
     // Dieses Skript ist dazu gedacht, 1x pro Tag zu laufen. Es lädt die Flüge von DIESEM Tag und generiert Bordbucheinträge für jedes Flugzeug, das in $LSVplanes aufgelistet ist
-    // Diese Einträge landen in der Datei ./fluege.txt. Am Ende mail dieses Skript die Datei an benannte Mailempfänger
+    // Diese Einträge landen in der Datei ./fluege.txt. Am Ende mailt dieses Skript die Datei an benannte Mailempfänger
     //
     // Wichtig: diese Skript nutzt die GetFlights_today() Funktion aus dem vereinsflieger wrapper. Es MUSS am selben Tag laufen, an dem die Flüge geflogen wurden.
     // Wenn man das nicht hinbekommt (z.B. weil die Flugerfassung so langsam ist), muss mann das Skript auf die Funktion umschreiben (auch im wrapper), die die Flüge eines
-    // Tages ausliest. Das würde ne Menge Änderungen an der Businesslogik erzwingen
+    // Tages ausliest.
     // Am besten lässt man dieses Skript Nachts (nach Sunset und Sunset-Bier) laufen. Wir lassen es um 23:45 laufen
     //
     // To do's:
