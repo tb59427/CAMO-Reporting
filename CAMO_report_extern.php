@@ -152,8 +152,8 @@
                 $mail->SMTPDebug = 0;
                 //Ask for HTML-friendly debug output
                 $mail->Debugoutput = 'html';
-                //Set the hostname of the mail server
-                $mail->Host = gethostbyname('mrvnet.kundenserver.de');
+                //Set the hostname of the mail server !!!Ändern!!!
+                $mail->Host = gethostbyname('smtp.somwhere.com');
                 // if your network does not support SMTP over IPv6
                 //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
                 $mail->Port = 587;
@@ -166,11 +166,11 @@
                 //Password to use for SMTP authentication !!!Ändern!!!
                 $mail->Password = "geheim";
                 //Set who the message is to be sent from !!!Ändern
-                $mail->setFrom('info@lsv-grenzland.de', 'LSV Grenzland e.V.');
+                $mail->setFrom('jemand@deinclub.de', 'DeinClub e.V.');
                 //Set an alternative reply-to address
-                $mail->addReplyTo('info@lsv-grenzland.de', 'LSV Grenzland e.V.');
+                $mail->addReplyTo('jemand@deinclub.de', 'DeinClub e.V.');
                 //Set who the message is to be sent to !!!Ändern!!! - wenn die Mail an mehrere gehen soll einfach mehrere Aufrufe an $mail->addAdress machen mit jeweils andern Adressen
-                $mail->addAddress('tb@pobox.com', 'Torsten Beyer');
+                $mail->addAddress('jemand@deinecamo.com', 'Deine CAMO');
                 
                 //Set the subject line
                 $mail->Subject = $subject;
