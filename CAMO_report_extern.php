@@ -38,14 +38,12 @@
     require $BASE_PATH . 'PHPMailer/PHPMailerAutoload.php';
     
     $configuration = parse_ini_file ($CONFIG_FILE, 1);
-    $CAMOPlanes = explode (",",$configuration[verein][flugzeuge]);
-    
+    $CAMOPlanes = explode (",",$configuration['verein']['flugzeuge']);
+    	
     date_default_timezone_set ( "UTC");
     $a = new VereinsfliegerRestInterface();
     
-    
-        
-    $result = $a->SignIn($configuration[vereinsflieger][login_name],$configuration[vereinsflieger][passwort],0);
+    $result = $a->SignIn($configuration['vereinsflieger']['login_name'],$configuration['vereinsflieger']['passwort'],0);
 
     if ($result) {
         
@@ -131,7 +129,7 @@
                 //Ask for HTML-friendly debug output
                 $mail->Debugoutput = 'html';
                 //Set the hostname of the mail server
-                $mail->Host = gethostbyname($configuration[mail][smtp_server]);
+                $mail->Host = gethostbyname($configuration['mail']['smtp_server']);
                 // if your network does not support SMTP over IPv6
                 //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
                 $mail->Port = 587;
@@ -140,16 +138,16 @@
                 //Whether to use SMTP authentication
                 $mail->SMTPAuth = true;
                 //Username to use for SMTP authentication - use full email address for gmail
-                $mail->Username = $configuration[mail][smtp_login];
+                $mail->Username = $configuration['mail']['smtp_login'];
                 //Password to use for SMTP authentication
-                $mail->Password = $configuration[mail][smtp_passwd];
+                $mail->Password = $configuration['mail']['smtp_passwd'];
                 //Set who the message is to be sent from
-                $mail->setFrom($configuration[mail][from_address], $configuration[mail][from_name]);
+                $mail->setFrom($configuration['mail']['from_address'], $configuration['mail']['from_name']);
                 //Set an alternative reply-to address
-                $mail->addReplyTo($configuration[mail][from_address], $configuration[mail][from_name]);
+                $mail->addReplyTo($configuration['mail']['from_address'], $configuration['mail']['from_name']);
                 //Set who the message is to be sent to
                 
-                $receivers = explode (",", $configuration[mail][receivers]);
+                $receivers = explode (",", $configuration['mail']['receivers']);
                 foreach ($receivers as $receiver) {
                   
                     $receiver_details = explode (":", $receiver);
@@ -167,9 +165,13 @@
                 
                 if (!$mail->send()) {
                     echo "Mailer Error: " . $mail->ErrorInfo;
+                } else {
+                	echo "Mail sent";
                 }
 
-            }
+            } else {
+                    print_r ("no flights\n");
+			}
         }
         else {
             print_r ("Flug lesen NAK\n");
