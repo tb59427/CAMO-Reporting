@@ -1,3 +1,6 @@
+;<?php
+;die(); //For security
+;/*
 ; Konfiguration für CAMO Reporting aus vereinsflieger.de
 
 ; hier login und passwort für das Einloggen in vereinsflieger angeben
@@ -25,4 +28,4 @@ from_address = "mail@verein.de"
 from_name = "Segefliegerverein e.V."
 receivers = "tb@pobox.com:Torsten Beyer,mail@camo.com:CAMO Manager"
 
-
+;*/

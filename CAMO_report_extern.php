@@ -20,7 +20,7 @@
     
     $BASE_PATH = '/homepages/25/d558414169/htdocs/vereinsflieger/';
     
-    $CONFIG_FILE = $BASE_PATH . "CAMOReport/CAMO.cfg";
+    $CONFIG_FILE = $BASE_PATH . "CAMOReport/CAMO.cfg.php";
     
     $aBBentry = array (
                 "date" => "",
