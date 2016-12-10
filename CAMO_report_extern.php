@@ -62,6 +62,8 @@
             // alle Flüge sind in aResponse
             //
             
+	    $found_something = false;
+		
             if ($no_Flights > 0) {
                 for ($i=0; $i<$no_Flights;$i++) {
                     
@@ -72,6 +74,8 @@
                     
                     if (in_array($id, $CAMOPlanes)) {
                         
+			$found_something = true;
+			    
                         if (array_key_exists ($id,$Flights)) {
                             $Flights[$id]["flighttime"] += intval ($aResponse[$i]["flighttime"]);
                             $Flights[$id]["landingcount"] += intval ($aResponse[$i]["landingcount"]);
@@ -105,70 +109,70 @@
                     }
                 }
                 
+                if ($found_something) {
+                	$fp = fopen("fluege.txt","w");
+                	$subject = sprintf ("CAMO Report %s:\n", $datum);
                 
-                $fp = fopen("fluege.txt","w");
-                $subject = sprintf ("CAMO Report %s:\n", $datum);
+                	fprintf ($fp,"CAMO Report %s:\n", $datum);
+                	fprintf ($fp,"Datum\t\tKennz.\tStart\tLandung\t\tF-Zeit (min)\tBlockzeit(min)\t#Landungen\n");
                 
-                fprintf ($fp,"CAMO Report %s:\n", $datum);
-                fprintf ($fp,"Datum\t\tKennz.\tStart\tLandung\t\tF-Zeit (min)\tBlockzeit(min)\t#Landungen\n");
+                	foreach ($Flights as $entry) {
+                    	fprintf ($fp, "%s\t%s\t%s\t%s\t\t%d\t\t%d\t\t\t%d\n", $entry["date"],$entry["callsign"],simpletime($entry["starttime"]), simpletime($entry["arrivaltime"]),$entry["flighttime"],$entry["blocktime"], $entry["landingcount"]);
+                	}
+                	fclose ($fp);
                 
-                foreach ($Flights as $entry) {
-                    fprintf ($fp, "%s\t%s\t%s\t%s\t\t%d\t\t%d\t\t\t%d\n", $entry["date"],$entry["callsign"],simpletime($entry["starttime"]), simpletime($entry["arrivaltime"]),$entry["flighttime"],$entry["blocktime"], $entry["landingcount"]);
-                }
-                fclose ($fp);
+                	//Create a new PHPMailer instance
+                	$mail = new PHPMailer;
+                	//Tell PHPMailer to use SendMail
+                	$mail->IsSendmail();
+                	//Enable SMTP debugging
+                	// 0 = off (for production use)
+                	// 1 = client messages
+                	// 2 = client and server messages
+                	$mail->SMTPDebug = 0;
+                	//Ask for HTML-friendly debug output
+                	$mail->Debugoutput = 'html';
+                	//Set the hostname of the mail server
+                	$mail->Host = gethostbyname($configuration['mail']['smtp_server']);
+                	// if your network does not support SMTP over IPv6
+                	//Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
+                	$mail->Port = 587;
+                	//Set the encryption system to use - ssl (deprecated) or tls
+                	$mail->SMTPSecure = 'tls';
+                	//Whether to use SMTP authentication
+                	$mail->SMTPAuth = true;
+                	//Username to use for SMTP authentication - use full email address for gmail
+                	$mail->Username = $configuration['mail']['smtp_login'];
+                	//Password to use for SMTP authentication
+                	$mail->Password = $configuration['mail']['smtp_passwd'];
+                	//Set who the message is to be sent from
+                	$mail->setFrom($configuration['mail']['from_address'], $configuration['mail']['from_name']);
+                	//Set an alternative reply-to address
+                	$mail->addReplyTo($configuration['mail']['from_address'], $configuration['mail']['from_name']);
+                	//Set who the message is to be sent to
                 
-                //Create a new PHPMailer instance
-                $mail = new PHPMailer;
-                //Tell PHPMailer to use SendMail
-                $mail->IsSendmail();
-                //Enable SMTP debugging
-                // 0 = off (for production use)
-                // 1 = client messages
-                // 2 = client and server messages
-                $mail->SMTPDebug = 0;
-                //Ask for HTML-friendly debug output
-                $mail->Debugoutput = 'html';
-                //Set the hostname of the mail server
-                $mail->Host = gethostbyname($configuration['mail']['smtp_server']);
-                // if your network does not support SMTP over IPv6
-                //Set the SMTP port number - 587 for authenticated TLS, a.k.a. RFC4409 SMTP submission
-                $mail->Port = 587;
-                //Set the encryption system to use - ssl (deprecated) or tls
-                $mail->SMTPSecure = 'tls';
-                //Whether to use SMTP authentication
-                $mail->SMTPAuth = true;
-                //Username to use for SMTP authentication - use full email address for gmail
-                $mail->Username = $configuration['mail']['smtp_login'];
-                //Password to use for SMTP authentication
-                $mail->Password = $configuration['mail']['smtp_passwd'];
-                //Set who the message is to be sent from
-                $mail->setFrom($configuration['mail']['from_address'], $configuration['mail']['from_name']);
-                //Set an alternative reply-to address
-                $mail->addReplyTo($configuration['mail']['from_address'], $configuration['mail']['from_name']);
-                //Set who the message is to be sent to
-                
-                $receivers = explode (",", $configuration['mail']['receivers']);
-                foreach ($receivers as $receiver) {
+                	$receivers = explode (",", $configuration['mail']['receivers']);
+                	foreach ($receivers as $receiver) {
                   
-                    $receiver_details = explode (":", $receiver);
-                    $mail->addAddress($receiver_details[0], $receiver_details[1]);
+                    	$receiver_details = explode (":", $receiver);
+                    	$mail->addAddress($receiver_details[0], $receiver_details[1]);
                     
-                }
-                //Set the subject line
-                $mail->Subject = $subject;
-                $mail->Body = "Anbei der " . $subject . "\n\n";
-                //Replace the plain text body with one created manually
-                $mail->AltBody = 'This is a plain-text message body';
-                //Attach an image file
-                $mail->addAttachment('./fluege.txt');
-                //send the message, check for errors
+                	}
+                	//Set the subject line
+                	$mail->Subject = $subject;
+                	$mail->Body = "Anbei der " . $subject . "\n\n";
+                	//Replace the plain text body with one created manually
+                	$mail->AltBody = 'This is a plain-text message body';
+                	//Attach an image file
+                	$mail->addAttachment('./fluege.txt');
+                	//send the message, check for errors
                 
-                if (!$mail->send()) {
-                    echo "Mailer Error: " . $mail->ErrorInfo;
-                } else {
-                	echo "Mail sent";
-                }
-
+                	if (!$mail->send()) {
+                    	echo "Mailer Error: " . $mail->ErrorInfo;
+                	} else {
+                		echo "Mail sent";
+                	}
+				}
             } else {
                     print_r ("no flights\n");
 			}
