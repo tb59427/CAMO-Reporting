@@ -73,6 +73,7 @@
             $datum = date_format($daydate, "Y-m-d");
             echo "Date: $datum ";
             $return = $a->GetFlights_date ($datum);
+            sleep(5);
           } else // mode: daily
           {
             $datum = date("d.m.Y", time());
