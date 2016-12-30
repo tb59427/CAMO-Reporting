@@ -16,6 +16,12 @@ passwort = "geheim"
 flugzeuge = "D-1234,D-ABCD,D-XYZA"
 
 ;
+; Programm-Modus: "daily" schickt die Fluege vom heutigen Tag an die CAMO, "lastmonth" die Fluege des letzten Monats.
+;
+[modus]
+mode = "lastmonth"
+
+;
 ; Konfiguration der gängisten variablen Einstellungen für den Mailversand
 ; wichtig bei receivers folgendes Format verwenden mailadresse:Name des Empfaengers
 ; mehrere solche Kombinationen sind möglich, wenn sie durch Kommata getrennt sind
