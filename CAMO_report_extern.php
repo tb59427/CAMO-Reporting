@@ -105,6 +105,7 @@
                               $Flights[$id]["motortime"] += round((60.0 * ((floatval ($aResponse[$i]["motorend"])) - (floatval ($aResponse[$i]["motorstart"])))), 0);
                               $Flights[$id]["landingcount"] += intval ($aResponse[$i]["landingcount"]);
                               $Flights[$id]["blocktime"] += intval ($aResponse[$i]["blocktime"]);
+							  $Flights[$id]["date"] = $datum;
                               
                               $temp_start = new DateTime($Flights[$id]["starttime"]);
                               $temp_end = new DateTime($Flights[$id]["arrivaltime"]);
